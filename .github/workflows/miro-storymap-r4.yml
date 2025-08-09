@@ -1,5 +1,3 @@
-name: Push Story Mapping R4 to Miro (IT CALF)
-
 on:
   workflow_dispatch:
     inputs:
