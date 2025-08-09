@@ -41,11 +41,12 @@ jobs:
           python-version: '3.11'
 
       - name: Echo inputs & list repo
+        shell: bash
         run: |
           echo "Inputs: prefix='${{ inputs.prefix }}' csv_path='${{ inputs.csv_path }}' dry_run='${{ inputs.dry_run }}'"
           echo "Repo root:"
           ls -la
-          echo "Top-level files:" 
+          echo "Top-level files:"
           find . -maxdepth 2 -type f -print | sort
 
       - name: Validate files
@@ -54,20 +55,19 @@ jobs:
           set -euo pipefail
           SCRIPT=push_storymap_r4_to_miro.py
           if [[ ! -f "$SCRIPT" ]]; then
-            echo "❌ Fichier manquant: $SCRIPT (attendu à la racine du repo)." >&2
-            echo "👉 Solution: ajoute $SCRIPT à la racine, ou modifie le workflow pour pointer vers son chemin réel." >&2
+            echo "Fichier manquant: $SCRIPT (attendu à la racine du repo)." >&2
             exit 2
           fi
           if [[ -n "${{ inputs.csv_path }}" ]]; then
             if [[ ! -f "${{ inputs.csv_path }}" ]]; then
-              echo "❌ CSV introuvable: ${{ inputs.csv_path }}" >&2
-              echo "👉 Solution: vérifie le chemin (ex: data/storymap_r4.csv) ou laisse le champ vide pour utiliser le modèle par défaut." >&2
+              echo "CSV introuvable: ${{ inputs.csv_path }}" >&2
               exit 2
             fi
           fi
-          echo "✅ Validation OK: $SCRIPT présent et CSV (si fourni) trouvé."
+          echo "Validation OK: $SCRIPT présent et CSV (si fourni) trouvé."
 
       - name: Installer dépendances
+        shell: bash
         run: |
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
@@ -75,29 +75,29 @@ jobs:
             pip install requests pandas python-slugify
           fi
 
-      - name: Pré-vérification accès Miro (optionnel)
+      - name: Pre-check Miro access (optional)
         shell: bash
         run: |
           set -e
           if [[ -z "${MIRO_TOKEN}" || -z "${MIRO_BOARD_ID}" ]]; then
-            echo "⚠️  MIRO_TOKEN ou MIRO_BOARD_ID non défini(s). Passe à l'étape suivante, mais l'appel API échouera." >&2
+            echo "MIRO_TOKEN or MIRO_BOARD_ID not defined. Skipping pre-check."
             exit 0
           fi
-          python - << 'PY'
+          python - <<'PY'
 import os, requests
 T=os.environ.get('MIRO_TOKEN'); B=os.environ.get('MIRO_BOARD_ID')
 h={'Authorization': f'Bearer {T}'}
 r=requests.get(f'https://api.miro.com/v2/boards/{B}', headers=h, timeout=30)
 print('HTTP', r.status_code)
 try:
-  j=r.json()
-  print('Board:', j.get('name'), '| ID:', j.get('id'))
+    j=r.json()
+    print('Board:', j.get('name'), '| ID:', j.get('id'))
 except Exception:
-  print('Réponse non JSON')
+    print('Non-JSON response')
 r.raise_for_status()
 PY
 
-      - name: Exécuter le script Story Mapping R4
+      - name: Run Story Mapping script
         shell: bash
         run: |
           set -euo pipefail
@@ -108,13 +108,14 @@ PY
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             args+=( --dry-run )
           fi
-          echo "Commande: python push_storymap_r4_to_miro.py ${args[*]}"
+          echo "Command: python push_storymap_r4_to_miro.py ${args[*]}"
           python push_storymap_r4_to_miro.py "${args[@]}"
 
-      - name: Sauvegarde logs
+      - name: Save logs
         if: always()
+        shell: bash
         run: |
-          echo "Run terminé à $(date -u +%Y-%m-%dT%H:%M:%SZ)" > run-summary.txt
+          echo "Run finished at $(date -u +%Y-%m-%dT%H:%M:%SZ)" > run-summary.txt
           printf "Prefix: %s\nCSV: %s\nDry-run: %s\n" "${{ inputs.prefix }}" "${{ inputs.csv_path }}" "${{ inputs.dry_run }}" >> run-summary.txt
 
       - name: Upload logs (artifact)
