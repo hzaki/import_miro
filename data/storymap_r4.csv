@@ -1,0 +1,41 @@
+Theme,Activity,Story,Sprint,Team,Status,Notes
+Cartes Grises & Attestations,Réception & stockage,Réception via boîte générique + SFTP,S1,IHM,À faire,Connexion boîte mail + drop SFTP dédié
+Cartes Grises & Attestations,Réception & stockage,Dépôt manuel multi-fichiers,S1,IHM,À faire,Drag & drop avec prévisualisation
+Cartes Grises & Attestations,Réception & stockage,Stockage avec métadonnées,S1,BPM,À faire,Type doc, date, immatriculation, id dossier
+Cartes Grises & Attestations,Appariement & indexation,OCR & extraction des champs clés,S2,BPM,Backlog,Libs OCR + règle post-traitement
+Cartes Grises & Attestations,Appariement & indexation,Appariement auto par n° dossier/immat,S2,BPM,Backlog,Score de confiance + logs
+Cartes Grises & Attestations,Appariement & indexation,Règles de fallback manuel,S2,Métier,Backlog,File d’attente pour saisie humaine
+Cartes Grises & Attestations,Contrôles & anomalies,Détection incohérences EKIP/MO,S2,BPM,Backlog,Comparaison champs critiques
+Cartes Grises & Attestations,Contrôles & anomalies,File d’anomalies avec SLA,S3,Métier,Backlog,Priorisation par âge/impact
+Cartes Grises & Attestations,Facturation & traçabilité,Tracer frais liés CG,S3,Finance,Backlog,Liaison ref. facture/dossier
+Cartes Grises & Attestations,Facturation & traçabilité,Journal d’accès/consultation documents,S3,MO,Backlog,Audit complet par utilisateur
+
+Paiement fournisseurs & prélèvements clients,Association d’infos externes,Associer libellés SEPA,S1,MO,À faire,Mappage motif → opération
+Paiement fournisseurs & prélèvements clients,Association d’infos externes,Associer n° facture & annexes,S2,MO,Backlog,Lien pièce jointe de notification
+Paiement fournisseurs & prélèvements clients,Association d’infos externes,Mapping bénéficiaire/motif,S2,MO,Backlog,Normalisation texte bancaire
+Paiement fournisseurs & prélèvements clients,Flux BO/MO et SEPA,Normaliser flux BO→MO paiements,S2,MO,Backlog,Contrats/écritures unifiés
+Paiement fournisseurs & prélèvements clients,Flux BO/MO et SEPA,Réconciliation prélèvements clients,S3,Finance,Backlog,Matching montants/dates
+Paiement fournisseurs & prélèvements clients,Flux BO/MO et SEPA,Gestion rejets/retours SEPA,S3,MO,Backlog,Statuts R-transactions + relances
+Paiement fournisseurs & prélèvements clients,Traçabilité & reporting,Traçabilité bout-en-bout,S3,MO,Backlog,Du prélèvement à la compta
+Paiement fournisseurs & prélèvements clients,Traçabilité & reporting,Rapports standard mensuels,S3,Finance,Backlog,Exports CSV/PDF planifiés
+Paiement fournisseurs & prélèvements clients,Traçabilité & reporting,Export audit conformité,S4,Finance,Backlog,Horodatage + opérateur
+Paiement fournisseurs & prélèvements clients,Conformité & KYC,Vérifier documents KYC avant paiement,S4,Métier,Backlog,Bloquant si KYC manquant
+
+Co-baillage,Création & gestion dossier,Créer dossier co-baillage,S1,IHM,Backlog,Écran dédié création
+Co-baillage,Création & gestion dossier,Écran de modification + statuts,S2,IHM,Backlog,Brouillon/En cours/Validé
+Co-baillage,Création & gestion dossier,Ajout de documents au dossier,S2,IHM,Backlog,Contrats/conventions/annexes
+Co-baillage,Quote-parts & calculs,Saisie quote-parts multi partenaires,S3,Finance,Backlog,Pourcentage par partenaire
+Co-baillage,Quote-parts & calculs,Calcul répartition loyers/charges,S3,Finance,Backlog,Arrondis et règles business
+Co-baillage,Génération & édition contrats,Générer conventions co-baillage,S3,BPM,Backlog,Modèles approuvés juridique
+Co-baillage,Génération & édition contrats,Édition auto des contrats via EKIP360,S3,BPM,Backlog,Publipostage EKIP360
+Co-baillage,Intégrations EKIP360,Synchroniser clés dans EKIP360,S3,MO,Backlog,ID dossier/partenaires/quote-part
+
+Syndication,Contrats miroir & automatisation,Créer contrats miroir,S2,BPM,Backlog,À partir du dossier maître
+Syndication,Contrats miroir & automatisation,Générer contrats de syndication,S3,BPM,Backlog,Paramétrable par modèle
+Syndication,Contrats miroir & automatisation,Workflow validation juridique,S3,Métier,Backlog,Étapes/acteurs/SLAs
+Syndication,Intégrations système,Intégrer EKIP360/MOCA,S3,MO,Backlog,Échanges BO/MO + MOCA
+Syndication,Intégrations système,Réduire double-saisie,S3,IHM,Backlog,Auto-complétion champs
+Syndication,Calcul taux de refinancement,Automatiser calcul du taux,S3,Finance,Backlog,Base taux + marges
+Syndication,Calcul taux de refinancement,Simulation scénarios,S4,Finance,Backlog,Sensibilité et variantes
+Syndication,Suivi & reporting,Tableau de bord syndication,S4,MO,Backlog,KPIs volumétrie/avancement
+Syndication,Suivi & reporting,Export vers outils financiers,S4,Finance,Backlog,Format attendu par équipe finance
