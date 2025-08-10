@@ -224,7 +224,7 @@ def create_frame(board_id: str, token: str, title: str, x: float, y: float, w: i
     payload = {
         "data": {"title": title},
         "position": {"x": x, "y": y},
-        "geometry": {"width": w, "height": h},
+        
     }
     out = _post(url, token, payload)
     return out.get("id")
@@ -235,7 +235,6 @@ def create_shape(board_id: str, token: str, text: str, x: float, y: float, w: in
     payload = {
         "data": {"content": text, "shape": shape},
         "position": {"x": x, "y": y},
-        "geometry": {"width": w, "height": h},
         "style": {"fontSize": 28},
     }
     out = _post(url, token, payload)
@@ -248,7 +247,6 @@ def create_sticky(board_id: str, token: str, text: str, x: float, y: float, colo
         "data": {"content": text},
         "style": {"fillColor": color, "textAlign": "left"},
         "position": {"x": x, "y": y},
-        "geometry": {"width": w, "height": h},
     }
     out = _post(url, token, payload)
     return out.get("id")
