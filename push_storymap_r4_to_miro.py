@@ -225,7 +225,6 @@ def create_frame(board_id: str, token: str, title: str, x: float, y: float, w: i
         "data": {"title": title},
         "position": {"x": x, "y": y},
         "geometry": {"width": w, "height": h},
-        "style": {"backgroundColor": "transparent"},
     }
     out = _post(url, token, payload)
     return out.get("id")
