@@ -84,8 +84,8 @@ jobs:
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             args+=( --dry-run )
           fi
-          echo "Command: python script_python_story_mapping_r_4_vers_miro_projet_it_calf.py ${args[*]}"
-          python script_python_story_mapping_r_4_vers_miro_projet_it_calf.py "${args[@]}"
+          echo "Command: python push_storymap_r4_to_miro.py ${args[*]}"
+          python push_storymap_r4_to_miro.py "${args[@]}"
 
       - name: Save summary
         if: always()
