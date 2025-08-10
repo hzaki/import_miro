@@ -17,16 +17,8 @@ on:
         default: "true"
         required: true
 
-permissions:
-  contents: read
-
-concurrency:
-  group: miro-storymap-r4
-  cancel-in-progress: false
-
 jobs:
   run:
-    name: Publier le Story Mapping R4
     runs-on: ubuntu-latest
     env:
       MIRO_TOKEN: ${{ secrets.MIRO_TOKEN }}
@@ -40,13 +32,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Echo inputs & list repo
+      - name: Show inputs & files
         shell: bash
         run: |
-          echo "Inputs: prefix='${{ inputs.prefix }}' csv_path='${{ inputs.csv_path }}' dry_run='${{ inputs.dry_run }}'"
-          echo "Repo root:"
+          echo "prefix=${{ inputs.prefix }} csv=${{ inputs.csv_path }} dry_run=${{ inputs.dry_run }}"
           ls -la
-          echo "Top-level files:"
           find . -maxdepth 2 -type f -print | sort
 
       - name: Validate files
@@ -64,9 +54,9 @@ jobs:
               exit 2
             fi
           fi
-          echo "Validation OK: $SCRIPT présent et CSV (si fourni) trouvé."
+          echo "Validation OK."
 
-      - name: Installer dépendances
+      - name: Install dependencies
         shell: bash
         run: |
           if [ -f requirements.txt ]; then
@@ -76,26 +66,12 @@ jobs:
           fi
 
       - name: Pre-check Miro access (optional)
+        if: ${{ env.MIRO_TOKEN != '' && env.MIRO_BOARD_ID != '' }}
         shell: bash
         run: |
           set -e
-          if [[ -z "${MIRO_TOKEN}" || -z "${MIRO_BOARD_ID}" ]]; then
-            echo "MIRO_TOKEN or MIRO_BOARD_ID not defined. Skipping pre-check."
-            exit 0
-          fi
-          python - <<'PY'
-import os, requests
-T=os.environ.get('MIRO_TOKEN'); B=os.environ.get('MIRO_BOARD_ID')
-h={'Authorization': f'Bearer {T}'}
-r=requests.get(f'https://api.miro.com/v2/boards/{B}', headers=h, timeout=30)
-print('HTTP', r.status_code)
-try:
-    j=r.json()
-    print('Board:', j.get('name'), '| ID:', j.get('id'))
-except Exception:
-    print('Non-JSON response')
-r.raise_for_status()
-PY
+          echo "Checking board $MIRO_BOARD_ID ..."
+          curl -sS -H "Authorization: Bearer $MIRO_TOKEN" "https://api.miro.com/v2/boards/$MIRO_BOARD_ID" | head -c 1000 || true
 
       - name: Run Story Mapping script
         shell: bash
@@ -111,12 +87,11 @@ PY
           echo "Command: python push_storymap_r4_to_miro.py ${args[*]}"
           python push_storymap_r4_to_miro.py "${args[@]}"
 
-      - name: Save logs
+      - name: Save summary
         if: always()
         shell: bash
         run: |
-          echo "Run finished at $(date -u +%Y-%m-%dT%H:%M:%SZ)" > run-summary.txt
-          printf "Prefix: %s\nCSV: %s\nDry-run: %s\n" "${{ inputs.prefix }}" "${{ inputs.csv_path }}" "${{ inputs.dry_run }}" >> run-summary.txt
+          printf "Prefix: %s\nCSV: %s\nDry-run: %s\n" "${{ inputs.prefix }}" "${{ inputs.csv_path }}" "${{ inputs.dry_run }}" > run-summary.txt
 
       - name: Upload logs (artifact)
         if: always()
